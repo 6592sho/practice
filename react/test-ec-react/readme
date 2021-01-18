@@ -1,0 +1,92 @@
+// なぜreduxを使うのか
+stateの見通しを良くするため
+どこからでもstateを参照/変更可能にするため
+モジュールを疎結合にするため
+機能Aと機能Bが互いに影響し合わない
+propsのバケツリレーをなくす
+storeの中身を変更、storeが参照しているところを変更
+
+// fluxフローって何
+データフロー設計の１つ
+データが常に１方向に流れる
+イベントによってデータが変化（イベント駆動）
+flux思想をreactの状態管理に適用したライブラリ=redux
+
+// actionsの役割
+アプリからstoreへデータを送るためのpayloadを渡す役割
+アプリから受け取ったデータをreducersへ渡す
+
+// 
+export const SIGN_IN = "SIGN_IN";
+export const signInAction = (userState) => {
+  return {
+    type: "SIGN_IN",
+    payload: {
+      isSignedIn: true,
+      uid: userState.uid,
+      username: userState.username,
+    }
+  }
+}
+
+export const SIGN_OUT = "SIGN_OUT";
+export const signOutAction = () => {
+  return {
+    type: "SIGN_OUT",
+    payload: isSignedIn: false,
+    uid: "",
+    username: "",
+  }
+}
+
+actionsはプレーンなオブジェクトのみを返す
+{
+  hoge: foo
+}
+
+// reducersの役割
+ACTIONSからデータを受けとり
+Storeのstateをどう変更するのか決める
+store内のstateの管理人
+
+// initialState
+storeの初期状態
+アプリに必要なstateをすべて記述
+exportしておく
+
+// Providerとは
+propsにstoreを渡す
+ラップしたコンポーネントにstoreの情報を渡す
+Reactコンポーネントないでreact-reduxのconnect関数を使えるようにする
+reactとreduxを接続してstoreを変更できるように
+
+// react-router
+reactのルーティング管理
+
+// connected-react-router
+reduxのstoreでルーティングを管理
+
+// re-ducksパターン
+users
+-actions.js
+-reducers.js
+-types.js
+-operations.js
+-index.js
+
+なるべく疎結合で一ファイルの記述量をなくす
+
+operations: 複雑な処理、redux-thunkで非同期処理を制御する、actionsを呼び出す
+types: typescriptの型定義
+selectors: storeで管理しているstateを参照する関数、reselect（npmモジュール）
+
+// redux-thunkとは
+reduxで非同期処理を制御するライブラリ
+通常のactionsはqaction　objectを受け取る
+＝関数を受け取ることができない
+＝async/awaitやpromiseを使えない
+
+// redux-thunk導入
+store.jsにモジュールimport
+applyMiddleware()に追加
+
