@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextInput from "./TextInput";
+require("dotenv").config();
 
 const FormDialog = (props) => {
   const [name, setName] = useState("");
@@ -33,7 +34,7 @@ const FormDialog = (props) => {
     [setDescription]
   );
 
-  const submitForm = () => {
+  const submitForm = async () => {
     const payload = {
       text: `お問い合わせがありました。
       お名前：${name}
@@ -41,19 +42,16 @@ const FormDialog = (props) => {
       問い合わせ内容：${description}`,
     };
 
-    const url =
-      "https://hooks.slack.com/services/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";
-
-    fetch(url, {
+    console.log(process.env.REACT_APP_SLACK_WEBHOOK_URL);
+    await fetch(process.env.REACT_APP_SLACK_WEBHOOK_URL, {
       method: "POST",
       body: JSON.stringify(payload),
-    }).then(() => {
-      alert("送信が完了しました。追ってご連絡いたします！");
-      setName("");
-      setEmail("");
-      setDescription("");
-      return props.handleClose();
     });
+    alert("送信が完了しました。追ってご連絡いたします！");
+    setName("");
+    setEmail("");
+    setDescription("");
+    return props.handleClose();
   };
 
   return (
@@ -96,7 +94,7 @@ const FormDialog = (props) => {
         <Button onClick={props.handleClose} color="primary">
           キャンセル
         </Button>
-        <Button onClick={submitForm} color="primary" autoFocus>
+        <Button onClick={submitForm} color="primary">
           送信
         </Button>
       </DialogActions>
